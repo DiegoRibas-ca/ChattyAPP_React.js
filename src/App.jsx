@@ -7,6 +7,10 @@ class App extends Component {
     super(props);
     this.state = { currentUser: "Diego", messages:[{user: 'Bob', message: 'Testing'}] };
   }
+//   WebSocket WebSocket(
+//   in DOMString url,
+//   in optional DOMString protocols
+// );
 
   handleNewUser = (user) => {
     console.log("handleNewUser <App />");
@@ -21,8 +25,22 @@ class App extends Component {
     const messages = this.state.messages.concat(newMessage)
     this.setState({ messages: messages })
   }
+  componentDidMount() {
+    console.log('d')
+
+  }
 
   componentDidMount() {
+    this.socket = new WebSocket("ws://0.0.0.0:3001")
+
+    this.socket.onopen = () => {
+      console.log('Connected to server')
+      // socket.send(JSON.stringify({
+      //   type: types.ADD_USER,
+      //   name: username
+      // }))
+    }
+
     console.log("componentDidMount <App />");
     setTimeout(() => {
       console.log("Simulating incoming message");
