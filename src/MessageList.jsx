@@ -4,8 +4,8 @@ import Message from './Message.jsx';
 class MessageList extends Component {
 
     getMessage() {
-        return this.props.messages.map((message, index) => (
-            <Message key={index} message={message} />
+        return this.props.messages.map((message) => (
+            <Message key={message.id} message={message} />
         ));
     }
 

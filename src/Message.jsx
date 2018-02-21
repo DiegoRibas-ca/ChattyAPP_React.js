@@ -8,6 +8,7 @@ class Message extends Component {
             <div className="message">
                 <span className="message-username">{this.props.message.user}</span>
                 <span className="message-content">{this.props.message.message} </span>
+                <span className="message-id">{this.props.message.id} </span>
                 {/* I won't be impressed with technology until I can download food. */}
             </div>
         );
