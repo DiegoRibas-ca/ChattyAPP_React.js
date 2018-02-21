@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 import ChatBar from './ChatBar.jsx';
 import MessageList from './MessageList.jsx';
+import Nav from './Nav.jsx';
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { currentUser: "Diego", messages:[] };
+    this.state = { numberClients: 0, currentUser: "Diego", messages:[] };
   }
   
   handleNewUser = (user) => {
@@ -50,6 +51,10 @@ class App extends Component {
           const notifications = this.state.messages.concat(dataServer)
           this.setState({ messages: notifications })
           break;
+        case "currentClients":
+          // handle incoming notification
+          this.setState({ numberClients: dataServer.clientsOn })
+          break;
         default:
         // show an error in the console if the message type is unknown
         throw new Error("Unknown event type " + data.type);
@@ -58,13 +63,14 @@ class App extends Component {
     console.log("componentDidMount <App />");
 
   }
-  // componentWillUnmount() {
-  //   this.socket.close();
-  // }
+  componentWillUnmount() {
+    this.socket.close();
+  }
   render() {
     console.log("Rendering <App/>");
     return (
       <div>
+        <Nav numberClients={this.state.numberClients}/>
         <MessageList messages={this.state.messages}/>
         <ChatBar  
           handleNewUser={this.handleNewUser}
