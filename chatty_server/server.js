@@ -20,23 +20,36 @@ const wss = new SocketServer({ server });
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
+wss.broadcast = function broadcast(data) {
+    const dataString = JSON.stringify(data)
+    wss.clients.forEach(function each(client) {
+        if (client.readyState === WebSocket.OPEN) {
+            // console.log('broadcast', typeof dataString );
+            client.send(dataString);
+        }
+    });
+};
 wss.on('connection', (ws) => {
     console.log('Client connected');
     ws.on('message', function incoming(message) {
-        const messageWithID = JSON.parse(message)
-        messageWithID.id = uuidv1();
-        // console.log(data);
-        // ws.send(JSON.stringify(messageID));
-        wss.broadcast = function broadcast(data) {
-            const dataString = JSON.stringify(data)
-            wss.clients.forEach(function each(client) {
-                if (client.readyState === WebSocket.OPEN) {
-                    console.log('broadcast', typeof dataString );
-                    client.send(dataString);
-                }
-            });
-        };
-        wss.broadcast(messageWithID)
+        const messageParsed = JSON.parse(message)
+        switch (messageParsed.type) {
+            case "postMessage":
+                // handle posted message
+                messageParsed.id = uuidv1();
+                messageParsed.type = "incomingMessage";
+                wss.broadcast(messageParsed)
+                break;
+            case "postNotification":
+                messageParsed.id = uuidv1();
+                messageParsed.type = "incomingNotification";
+                wss.broadcast(messageParsed)
+                // handle incoming notification
+                break;
+            default:
+                // show an error in the console if the message type is unknown
+                throw new Error("Unknown event type " + data.type);
+        }
     });
 
 

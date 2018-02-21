@@ -7,50 +7,60 @@ class App extends Component {
     super(props);
     this.state = { currentUser: "Diego", messages:[] };
   }
-
+  
   handleNewUser = (user) => {
     console.log("handleNewUser <App />");
-    // const newMessage = [...this.state.messages, message]
+    const newNotification = { type: "postNotification", user: this.state.currentUser, content: `${this.state.currentUser} has changed their name to ${user}` };
+    const noteString = JSON.stringify(newNotification)
     this.setState({ currentUser: user })
+    this.socket.send(noteString); 
   }
-
+  
   handleNewMessage = (message) => {
     console.log("handleNewMessage <App />");
     // const newMessage = [...this.state.messages, message]
-    const newMessage = { user: this.state.currentUser, message: message };
-
-    const messageParsed = JSON.stringify(newMessage)
-    this.socket.send(messageParsed); 
+    let userName = "";
+    if (this.state.currentUser === "") {
+      userName = 'Anonymous';
+    } else {
+      userName = this.state.currentUser;
+    }
+    const newMessage = { type: "postMessage", user: userName, message: message };
+    const messageString = JSON.stringify(newMessage)
+    this.socket.send(messageString); 
   }
   
   componentDidMount() {
     this.socket = new WebSocket("ws://0.0.0.0:3001")
     
-    this.socket.onmessage = (data) => {
-      console.log('received', data.data)
-      const newMessageAndID = JSON.parse(data.data)
-      console.log('parsed', newMessageAndID)
-      const messages = this.state.messages.concat(newMessageAndID)
-      this.setState({ messages: messages })
-    }
     this.socket.onopen = (event) => {
       console.log('Connected to server')
-      // this.socket.send(event.data); 
-      // socket.send(JSON.stringify({
-        //   type: types.ADD_USER,
-        //   name: username
-        // }))
+      }
+    this.socket.onmessage = (data) => {
+      console.log('received', data.data)
+      const dataServer = JSON.parse(data.data)
+      switch (dataServer.type) {
+        case "incomingMessage":
+        // handle incoming message
+          const messages = this.state.messages.concat(dataServer)
+          this.setState({ messages: messages })
+          break;
+        case "incomingNotification":
+        // handle incoming notification
+          const notifications = this.state.messages.concat(dataServer)
+          this.setState({ messages: notifications })
+          break;
+        default:
+        // show an error in the console if the message type is unknown
+        throw new Error("Unknown event type " + data.type);
+      }
     }
-
-      
     console.log("componentDidMount <App />");
-    // setTimeout(() => {
-    //   console.log("Simulating incoming message");
-    //   const newMessage = { user: "Michelle", message: "Hello there!" };
-    //   const messages = this.state.messages.concat(newMessage)
-    //   this.setState({ messages: messages })
-    // }, 3000);
+
   }
+  // componentWillUnmount() {
+  //   this.socket.close();
+  // }
   render() {
     console.log("Rendering <App/>");
     return (
