@@ -6,16 +6,21 @@ class MessageList extends Component {
     getMessage() {
         return this.props.messages.map((message) => {
             // console.log('MessaList console',message);
-            if (message.type === "incomingMessage" ) {
+            if (message.type === "incomingMessage" || message.type === "incomingImage" ) {
+                console.log('sending to message')
                return <Message key={message.id} message={message} />
             } else if (message.type === "incomingNotification" ) {
                 return (
                 <div key={message.id} className="message system">
                     {message.content}
                 </div>)
-            } 
+            }
         });
     }
+
+              // function MyComponent() {
+          //   return <div dangerouslySetInnerHTML={{__html: dataServer.message}}/>;
+          // }
 
     render() {
         console.log("Rendering <MessageList/>");

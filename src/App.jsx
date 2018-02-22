@@ -42,13 +42,18 @@ class App extends Component {
       console.log('Connected to server')
       }
     this.socket.onmessage = (data) => {
-      console.log('received', data.data)
       const dataServer = JSON.parse(data.data)
+      console.log('received', dataServer.type)
       switch (dataServer.type) {
         case "incomingMessage":
         // handle incoming message
           const messages = this.state.messages.concat(dataServer)
           this.setState({ messages: messages })
+          break;
+        case "incomingImage":
+          // handle incoming message
+          const image = this.state.messages.concat(dataServer)
+          this.setState({ messages: image })
           break;
         case "incomingNotification":
         // handle incoming notification
