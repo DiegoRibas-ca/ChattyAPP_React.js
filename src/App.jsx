@@ -6,7 +6,7 @@ import Nav from './Nav.jsx';
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { numberClients: 0, currentUser: "Diego", messages:[] };
+    this.state = { numberClients: {}, currentUser: "Diego", messages:[] };
   }
   
   handleNewUser = (user) => {
@@ -53,7 +53,7 @@ class App extends Component {
           break;
         case "currentClients":
           // handle incoming notification
-          this.setState({ numberClients: dataServer.clientsOn })
+          this.setState({ numberClients: dataServer })
           break;
         default:
         // show an error in the console if the message type is unknown
@@ -81,3 +81,4 @@ class App extends Component {
   }
 }
 export default App;
+

@@ -2,7 +2,7 @@ const express = require('express');
 const SocketServer = require('ws').Server;
 const uuidv1 = require('uuid/v1');
 const WebSocket = require('ws');
-
+var randomColor = require('randomcolor');
 // Set the port to 3001
 const PORT = 3001;
 
@@ -24,8 +24,9 @@ wss.broadcast = function broadcast(data) {
         }
     });
 };
-const numberClients = {type: 'currentClients', clientsOn: 0} 
+const numberClients = { type: 'currentClients', clientsOn: 0} 
 wss.on('connection', (ws) => {
+    let colour = randomColor();
     numberClients.clientsOn += 1;
     console.log('Client connected', numberClients);
     wss.broadcast(numberClients)
@@ -34,17 +35,18 @@ wss.on('connection', (ws) => {
         const messageParsed = JSON.parse(message)
         switch (messageParsed.type) {
             case "postMessage":
-            // handle posted message
-            messageParsed.id = uuidv1();
-            messageParsed.type = "incomingMessage";
-            wss.broadcast(messageParsed)
-            break;
+                // handle posted message
+                messageParsed.id = uuidv1();
+                messageParsed.type = "incomingMessage";
+                messageParsed.colour = colour;
+                wss.broadcast(messageParsed)
+                break;
             case "postNotification":
-            messageParsed.id = uuidv1();
-            messageParsed.type = "incomingNotification";
-            wss.broadcast(messageParsed)
-            // handle incoming notification
-            break;
+                messageParsed.id = uuidv1();
+                messageParsed.type = "incomingNotification";
+                wss.broadcast(messageParsed)
+                // handle incoming notification
+                break;
             default:
             // show an error in the console if the message type is unknown
             throw new Error("Unknown event type " + data.type);
