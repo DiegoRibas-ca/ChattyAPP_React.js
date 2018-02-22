@@ -2,11 +2,13 @@ import React, {Component} from 'react';
 import ChatBar from './ChatBar.jsx';
 import MessageList from './MessageList.jsx';
 import Nav from './Nav.jsx';
+let randomColor = require('randomcolor');
+
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { numberClients: {}, currentUser: "Diego", messages:[] };
+    this.state = { numberClients: {}, color: "", currentUser: "Diego", messages:[] };
   }
   
   handleNewUser = (user) => {
@@ -26,7 +28,7 @@ class App extends Component {
     } else {
       userName = this.state.currentUser;
     }
-    const newMessage = { type: "postMessage", user: userName, message: message };
+    const newMessage = { type: "postMessage", user: userName, colour: this.state.color, message: message };
     const messageString = JSON.stringify(newMessage)
     this.socket.send(messageString); 
   }
@@ -35,6 +37,8 @@ class App extends Component {
     this.socket = new WebSocket("ws://0.0.0.0:3001")
     
     this.socket.onopen = (event) => {
+      let colour = randomColor();
+      this.setState({ color: colour })
       console.log('Connected to server')
       }
     this.socket.onmessage = (data) => {
