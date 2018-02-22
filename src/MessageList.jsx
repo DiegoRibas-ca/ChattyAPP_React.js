@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import Message from './Message.jsx';
 
 class MessageList extends Component {
-
+    // scroll the screen to follow as you send a lot of messages 
+    componentDidUpdate() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
     getMessage() {
         return this.props.messages.map((message) => {
             // console.log('MessaList console',message);
@@ -17,10 +20,6 @@ class MessageList extends Component {
             }
         });
     }
-
-              // function MyComponent() {
-          //   return <div dangerouslySetInnerHTML={{__html: dataServer.message}}/>;
-          // }
 
     render() {
         console.log("Rendering <MessageList/>");

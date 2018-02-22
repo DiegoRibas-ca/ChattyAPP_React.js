@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 
 class ChatBar extends Component {
-
+    // event listener to changes in username handled as a notification in message
     changeUser = (event) => {
         if (event.key === 'Enter') {
             this.props.handleNewUser(event.target.value);
         }
     }   
+    // event listener to send message
     onKeyPress = (event) => {
         if (event.key === 'Enter') {
             this.props.handleNewMessage(event.target.value);

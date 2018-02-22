@@ -21,7 +21,6 @@ class App extends Component {
   
   handleNewMessage = (message) => {
     console.log("handleNewMessage <App />");
-    // const newMessage = [...this.state.messages, message]
     let userName = "";
     if (this.state.currentUser === "") {
       userName = 'Anonymous';
