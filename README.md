@@ -54,9 +54,9 @@ SERVER SIDE
 
 ## Screenshots
 
-!["User Diego as default"  ](https://github.com/swiftsimon/supine/blob/master/docs/Supine-main.png?raw=true )
-!["talking with 2 users"  ](https://github.com/swiftsimon/supine/blob/master/docs/Supine-Menu.png?raw=true )
-!["They really like gifs!"  ](https://github.com/swiftsimon/supine/blob/master/docs/Supine-Order.png?raw=true )
+!["User Diego as default"  ](https://github.com/DiegoRibas-ca/ChattyAPP_React.js/blob/master/docs/Talking%20with%20another%20user.png )
+!["talking with 3 users"  ](https://github.com/DiegoRibas-ca/ChattyAPP_React.js/blob/master/docs/3%20users.png )
+!["They really like gifs!"  ](https://github.com/DiegoRibas-ca/ChattyAPP_React.js/blob/master/docs/everybody%20like%20gifs.png )
 
 
 
